@@ -17,8 +17,8 @@ RUN pip install -r /requirements/development.txt
 RUN chmod -R +x /scripts && \
     mkdir -p /vol/web/static && \
     mkdir -p /vol/web/media && \
-    adduser --disabled-password --no-create-home content && \
-    chown -R content:content /vol && \
+    adduser --disabled-password --no-create-home b2b && \
+    chown -R b2b:b2b /vol && \
     chmod -R 755 /vol
 
 

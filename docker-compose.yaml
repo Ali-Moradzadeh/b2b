@@ -4,7 +4,9 @@ services:
   app:
     build:
       context: .
-    command: python manage.py runserver 0.0.0.0:8000
+    command: >
+      sh -c "python manage.py migrate &&
+             python manage.py runserver 0.0.0.0:8000"
     ports:
       - "8000:8000"
     volumes:
@@ -18,11 +20,11 @@ services:
     ports:
       - "5432:5432"
     volumes:
-      - content-data:/var/lib/postgresql/data
+      - b2b-data:/var/lib/postgresql/data
     environment:
       - POSTGRES_DB=b2b
       - POSTGRES_USER=b2b
       - POSTGRES_PASSWORD=default
 
 volumes:
-  content-data:
+  b2b-data:
