@@ -87,7 +87,7 @@ DATABASES = {
         'NAME': 'b2b',
         'USER': 'b2b',
         'PASSWORD': 'default',
-        'HOST': 'db',
+        'HOST': 'localhost',
         'PORT': '5432',
     }
 }
@@ -156,9 +156,14 @@ LOGGING = {
             'level': 'INFO',
             'class': 'logging.StreamHandler',
         },
+        'file': {
+            'level': 'ERROR',
+            'class': 'logging.FileHandler',
+            'filename': 'transactions.log'
+        },
     },
     'root': {
-        'handlers': ['console'],
-        'level': 'INFO',
+        'handlers': ['file'],
+        'level': 'ERROR',
     },
 }

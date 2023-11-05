@@ -21,7 +21,6 @@ class TransactionTest(TestCase):
         self.client = Client()
     
     def test_pattern(self):
-        
         for tp in transaction_patterns:
             data = {"amount": tp.amount}
             

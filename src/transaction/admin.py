@@ -2,7 +2,10 @@ from django.contrib import admin
 from .models import Wallet, CreditChargeRequest, ProcessedCreditChargeRequest, NotProcessedCreditChargeRequest, SellCredit
 from django.db import transaction
 from django.db.models import Sum, F
+from django.contrib.admin.models import LogEntry
 
+
+admin.site.register(LogEntry)
 
 @admin.register(Wallet)
 class WalletAdmin(admin.ModelAdmin):

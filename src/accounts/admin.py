@@ -23,18 +23,32 @@ class CustomUserAdmin(UserAdmin):
     
     def get_username(self, instance):
         return instance.profile.username if instance.profile and instance.profile.username else '?'
-    
     get_username.short_description = 'username'
+
+    @admin.action(description="make selected users verified")
+    def verify_users(self, request, queryset):
+        queryset.update(is_verified=True)
+
+    @admin.action(description="make selected users unverified")
+    def unverify_users(self, request, queryset):
+        queryset.update(is_verified=False)
 
 
 @admin.register(User)
 class UserAdmin(CustomUserAdmin):
-    actions = ["deactivate_users"]
+    actions = ['deactivate_users', 'verify_users', 'unverify_users']
     
     @admin.action
     def deactivate_users(self, request, queryset):
         queryset.delete()
     
+    @admin.action(description="make selected users verified")
+    def verify_users(self, request, queryset):
+        queryset.update(is_verified=True)
+
+    @admin.action(description="make selected users unverified")
+    def unverify_users(self, request, queryset):
+        queryset.update(is_verified=False)
 
 @admin.register(InactiveUser)
 class InactiveUserAdmin(CustomUserAdmin):

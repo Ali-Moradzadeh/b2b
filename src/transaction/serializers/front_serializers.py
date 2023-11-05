@@ -1,5 +1,6 @@
 from rest_framework import serializers
-from transaction.models import NotProcessedCreditChargeRequest as Npreq, SellCredit
+from transaction.models import NotProcessedCreditChargeRequest as Npreq, SellCredit, Wallet
+from django.db import transaction
 
 
 class CreateCreditChargeRequestSerializer(serializers.ModelSerializer):
@@ -12,6 +13,10 @@ class CreateCreditChargeRequestSerializer(serializers.ModelSerializer):
         data['wallet'] = self.context['request'].user.profile.wallet
         return data
 
+    @transaction.atomic
+    def save(self, *args, **kwargs):
+        return super().save(*args, **kwargs)
+
 
 class CreateSellRequestSerializer(serializers.ModelSerializer):
     class Meta:
@@ -23,11 +28,7 @@ class CreateSellRequestSerializer(serializers.ModelSerializer):
         data['wallet'] = self.context['request'].user.profile.wallet
         return data
 
+    @transaction.atomic
     def save(self, *args, **kwargs):
-        try:
-            instance = SellCredit(**self.validated_data)
-            instance.full_clean()
-            return super().save(*args, **kwargs)
-        except Exception as e:
-            raise serializers.ValidationError(e)
+        return super().save(*args, **kwargs)
     

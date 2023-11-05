@@ -1,4 +1,4 @@
-from django.db import models
+from django.db import models, transaction
 from accounts.models import Profile
 from .managers import CreditChargeRequestManager, ProcessedCreditChargeRequestManager, NotProcessedCreditChargeRequestManager, SellCreditManager
 from utils.validators import positive_amount_validator
@@ -55,6 +55,10 @@ class NotProcessedCreditChargeRequest(CreditChargeRequest):
     
     objects = NotProcessedCreditChargeRequestManager()
     
+    @transaction.atomic
+    def save(self, *args, **kwargs):
+        super().save(*args, **kwargs)
+    
     class Meta:
         proxy = True
 
@@ -72,6 +76,7 @@ class ProcessedCreditChargeRequest(CreditChargeRequest):
             raise ValidationError(_("Can't directly create a processed credit charge request"))
     
     def save(self, *args, **kwargs):
+        self.full_clean()
         self.processed = True
         super().save(*args, **kwargs)
     
@@ -92,6 +97,7 @@ class SellCredit(models.Model):
         if self.amount > self.wallet.credit:
             raise ValidationError(_("not enough wallet credit to sell"))
     
+    @transaction.atomic
     def save(self, *args, **kwargs):
         super().save(*args, **kwargs)
     

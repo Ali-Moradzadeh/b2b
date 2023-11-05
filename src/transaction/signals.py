@@ -12,12 +12,14 @@ def auto_create_wallet(sender, instance, created, **kwargs):
 @receiver(post_save, sender=NotProcessedCreditChargeRequest)
 def charge_credit(sender, instance, created, **kwargs):
     if instance.processed:
-        instance.wallet.credit += instance.amount
-        instance.wallet.save()
+        wallet = Wallet.objects.select_for_update().get(id=instance.wallet.id)
+        wallet.credit += instance.amount
+        wallet.save()
 
 
 @receiver(post_save, sender=SellCredit)
 def sell_credit(sender, instance, created, **kwargs):
     if created:
-        instance.wallet.credit -= instance.amount
-        instance.wallet.save()
+        wallet = Wallet.objects.select_for_update().get(id=instance.wallet.id)
+        wallet.credit -= instance.amount
+        wallet.save()

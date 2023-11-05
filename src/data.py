@@ -11,7 +11,7 @@ user_E = "e@gmail.com"
 user_F = "f@gmail.com"
 
 
-charge_url = reverse("create_credit_charge")
+charge_url = reverse("credit_charge")
 sell_url = reverse("sell_credit")
 
 
