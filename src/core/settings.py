@@ -87,7 +87,7 @@ DATABASES = {
         'NAME': 'b2b',
         'USER': 'b2b',
         'PASSWORD': 'default',
-        'HOST': 'db',
+        'HOST': 'localhost',
         'PORT': '5432',
     }
 }

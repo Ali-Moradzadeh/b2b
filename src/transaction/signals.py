@@ -19,5 +19,6 @@ def charge_credit(sender, instance, created, **kwargs):
 @receiver(post_save, sender=SellCredit)
 def sell_credit(sender, instance, created, **kwargs):
     if created:
+        
         instance.wallet.credit -= instance.amount
         instance.wallet.save()
