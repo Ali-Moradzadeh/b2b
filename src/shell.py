@@ -41,10 +41,14 @@ def delsells():
 
 def addcharge(amount):
     wlts = Wallet.objects.all()[:]
-    for i in range(1, 31):
+    for i in range(1, len(wlts)):
         Npreq.objects.create(wallet=wlts[i], amount=amount)
 
 def setzero():
     Wallet.objects.update(credit=0)
     delcharges()
     delsells()
+
+def check(num):
+    wlt = Wallet.objects.exclude(id=1)[:]
+    return all([wlt[i].check_turnover_correctness() for i in range(num)])

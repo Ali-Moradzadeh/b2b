@@ -36,11 +36,11 @@ class PostApiUser(HttpUser):
         super().on_stop()
         self.__class__.user_id = 0
     
-    @task
+    #@task
     def buy_credit(self):
-        self.client.post(charge_url, json={'amount': 2}, headers=self.headers)
+        self.client.post(charge_url, json={'amount': randint(10, 50)}, headers=self.headers)
     
     @task
     def sell_credit(self):
-        self.client.post(sell_url, json={'amount': randint(1, 50)}, headers=self.headers)
+        self.client.post(sell_url, json={'amount': 6}, headers=self.headers)
     

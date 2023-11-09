@@ -2,13 +2,13 @@ from django.core.management.base import BaseCommand,CommandError
 from accounts.models import User
 
 
-count = 30
+count = 200
 
 class Command(BaseCommand):
     help='create test users for request load test'
 
     def handle(self,*args,**kwargs):
-        for i in range(1, count+1):
+        for i in range(51, count+1):
             if i < 10:
                 email = f"test_user_0{i}@gmail.com"
                 phone = f"+98917165120{i}"

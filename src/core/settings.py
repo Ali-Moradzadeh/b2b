@@ -27,6 +27,14 @@ DEBUG = True
 
 ALLOWED_HOSTS = ["*"]
 
+# b2b.src.core/settings.py
+# Celery configuration
+CELERY_BROKER_URL = 'pyamqp://localhost'  # Use 'pyamqp' for RabbitMQ
+CELERY_RESULT_BACKEND = 'rpc://'
+
+# Optional: Configure timezone if needed
+CELERY_TIMEZONE = 'UTC'
+
 AUTH_USER_MODEL = 'accounts.User'
 
 # Application definition
@@ -38,6 +46,7 @@ INSTALLED_APPS = [
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
+    #'daphne',
     'django.contrib.staticfiles',
     
     'rest_framework',
@@ -76,6 +85,7 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'core.wsgi.application'
+ASGI_APPLICATION = 'core.asgi.application'
 
 
 # Database
