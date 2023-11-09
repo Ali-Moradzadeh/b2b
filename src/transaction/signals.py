@@ -2,6 +2,7 @@ from .models import Wallet, NotProcessedCreditChargeRequest, SellCredit
 from accounts.models import Profile
 from django.db.models.signals import pre_save, post_save
 from django.dispatch import receiver
+from django.db.models import F
 
 
 @receiver(post_save, sender=Profile)
@@ -12,13 +13,10 @@ def auto_create_wallet(sender, instance, created, **kwargs):
 @receiver(post_save, sender=NotProcessedCreditChargeRequest)
 def charge_credit(sender, instance, created, **kwargs):
     if instance.processed:
-        instance.wallet.credit += instance.amount
-        instance.wallet.save()
+        Wallet.objects.filter(profile=instance.wallet.profile).update(credit=F("credit")+instance.amount)
 
 
 @receiver(post_save, sender=SellCredit)
 def sell_credit(sender, instance, created, **kwargs):
     if created:
-        
-        instance.wallet.credit -= instance.amount
-        instance.wallet.save()
+        Wallet.objects.filter(profile=instance.wallet.profile).update(credit=F("credit")-instance.amount)
