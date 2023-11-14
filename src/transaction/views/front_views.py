@@ -13,11 +13,9 @@ class CreateCreditChargeRequest(CreateAPIView):
     serializer_class = front_srz.CreateCreditChargeRequestSerializer
     permission_classes = [IsAuthenticated, ]
     
-    @transaction.atomic
     def post(self, request):
         try:
             data = request.data.get('amount')
-            Wallet.objects.select_for_update().get(profile__user__id=request.user.id)
             result = super().post(request)
         except Exception as e:
             logger.error(f"charging of {request.user} by {data} has error {e}")
@@ -31,11 +29,9 @@ class CreateSellCreditRequest(CreateAPIView):
     serializer_class = front_srz.CreateSellRequestSerializer
     permission_classes = [IsAuthenticated, ]
     
-    @transaction.atomic
     def post(self, request):
         try:
             data = request.data.get('amount')
-            Wallet.objects.select_for_update().get(profile__user__id=request.user.id)
             result = super().post(request)
         except Exception as e:
             logger.error(f"{request.user} selling credit by {data} has error")

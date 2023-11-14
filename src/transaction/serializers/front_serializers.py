@@ -22,12 +22,4 @@ class CreateSellRequestSerializer(serializers.ModelSerializer):
         data = super().validate(data)
         data['wallet'] = self.context['request'].user.profile.wallet
         return data
-
-    def save(self, *args, **kwargs):
-        try:
-            instance = SellCredit(**self.validated_data)
-            instance.full_clean()
-            return super().save(*args, **kwargs)
-        except Exception as e:
-            raise serializers.ValidationError(e)
     

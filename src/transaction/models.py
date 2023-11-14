@@ -10,6 +10,9 @@ from django.utils.translation import gettext_lazy as _
 class Wallet(models.Model):
     profile = models.OneToOneField(Profile, on_delete=models.PROTECT)
     credit = models.PositiveIntegerField()
+    
+    class Meta:
+        ordering = ("pk", )
 
     def processed_credit_charge_requests(self):
         return self.credit_charge_requests.filter(processed=True)
@@ -87,12 +90,12 @@ class SellCredit(models.Model):
     
     #objects = SellCreditManager()
     
-    def full_clean(self, *args, **kwargs):
-        super().full_clean(*args, **kwargs)
+    def clean(self, *args, **kwargs):
         if self.amount > self.wallet.credit:
             raise ValidationError(_("not enough wallet credit to sell"))
     
     def save(self, *args, **kwargs):
+        super().full_clean()
         super().save(*args, **kwargs)
     
     def __str__(self):

@@ -11,6 +11,7 @@ from django.core.exceptions import PermissionDenied
 
 class CreateUserAuthTokenView(ObtainAuthToken):
     def post(self, request, *args, **kwargs):
+        print(request.data)
         serializer = self.serializer_class(data=request.data, context={'request': request})
         serializer.is_valid(raise_exception=True)
         user = serializer.validated_data['user']
