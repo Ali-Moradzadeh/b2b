@@ -48,3 +48,16 @@ class StaffManager(Manager):
 class CustomerManager(Manager):
     def get_queryset(self):
         return ActiveUserQueryset(self.model, self._db).filter(Q(is_active=True) & ~staff_q)
+
+
+class UnreadNotificationManager(Manager):
+    def get_queryset(self):
+        return Queryset(self.model, self._db).filter(read=False)
+    
+    def get_and_mark_as_read(self):
+        unreads = self.get_queryset().all()
+        self.get_queryset().update(read=True)
+        return unreads
+
+    def get_for_user(self, user_id):
+        return self.get_queryset().filter(profile__user__id=user_id)

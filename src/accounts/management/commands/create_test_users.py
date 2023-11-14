@@ -8,7 +8,7 @@ class Command(BaseCommand):
     help='create test users for request load test'
 
     def handle(self,*args,**kwargs):
-        for i in range(51, count+1):
+        for i in range(0, count+1):
             if i < 10:
                 email = f"test_user_0{i}@gmail.com"
                 phone = f"+98917165120{i}"

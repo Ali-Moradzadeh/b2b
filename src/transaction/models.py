@@ -106,5 +106,3 @@ class SellCredit(models.Model):
     
     def __str__(self):
         return f"{self.wallet}<-={self.amount}>"
-
-    

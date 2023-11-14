@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
-from .models import User, InactiveUser, StaffUser, CustomerUser, Profile
+from .models import User, InactiveUser, StaffUser, CustomerUser, Profile, Notification
 
 
 class CustomUserAdmin(UserAdmin):
@@ -58,7 +58,10 @@ class InactiveUserAdmin(CustomUserAdmin):
     @admin.action
     def activate_users(self, request, queryset):
         queryset.delete()
-    
+
+@admin.register(Notification)
+class NotificationAdmin(admin.ModelAdmin):
+    list_display = ('profile', 'message', 'read')
 
 admin.site.register(StaffUser, UserAdmin)
 admin.site.register(CustomerUser, UserAdmin)

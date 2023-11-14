@@ -27,26 +27,19 @@ DEBUG = True
 
 ALLOWED_HOSTS = ["*"]
 
-# b2b.src.core/settings.py
-# Celery configuration
-CELERY_BROKER_URL = 'pyamqp://localhost'  # Use 'pyamqp' for RabbitMQ
-CELERY_RESULT_BACKEND = 'rpc://'
-
-# Optional: Configure timezone if needed
-CELERY_TIMEZONE = 'UTC'
 
 AUTH_USER_MODEL = 'accounts.User'
 
 # Application definition
 
 INSTALLED_APPS = [
+    'daphne',
     'accounts.apps.AccountsConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
-    #'daphne',
     'django.contrib.staticfiles',
     
     'rest_framework',
@@ -183,3 +176,28 @@ LOGGING = {
 
 
 TEST_RUNNER = 'django.test.runner.DiscoverRunner'
+
+# Celery configuration
+CELERY_BROKER_URL = 'redis://localhost:6379/0'
+CELERY_RESULT_BACKEND = 'redis://localhost:6379/0'
+CELERY_ACCEPT_CONTENT = ['json']
+CELERY_TASK_SERIALIZER = 'json'
+CELERY_RESULT_SERIALIZER = 'json'
+CELERY_TIMEZONE = 'UTC'
+
+"""
+CELERY_BROKER_URL = 'pyamqp://guest:guest@localhost//'
+CELERY_RESULT_BACKEND = 'rpc://'
+CELERY_ACCEPT_CONTENT = ['json']
+CELERY_TASK_SERIALIZER = 'json'
+CELERY_RESULT_SERIALIZER = 'json'
+"""
+
+CHANNEL_LAYERS = {
+    "default": {
+        "BACKEND": "channels_redis.core.RedisChannelLayer",
+        "CONFIG": {
+            "hosts": [("127.0.0.1", 6379)],
+        },
+    },
+}

@@ -45,6 +45,7 @@ def test_concurrent_charge_requests(wallets):
     def perform_transaction(klass, wlt, amount):
         _type = TRANSACTION_CHARGE if klass == Npreq else TRANSACTION_SELL
         obj = klass(wallet=wlt, amount=amount)
+        
         global counter
         count = str(counter).zfill(len(str((CHARGE_COUNT + SELL_COUNT) * len(wallets))))
         counter += 1
@@ -67,7 +68,7 @@ def test_concurrent_charge_requests(wallets):
             klass = transaction_str_class_map[rnd_ptrn.type]
             queue.establish(tg, args=(klass, wlt, rnd_ptrn.amount))
     
-    queue.start_join_all(100)
+    queue.start_join_all()
     
     def reduce_key(pre, result_item):
         amount = result_item.amount

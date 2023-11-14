@@ -7,7 +7,7 @@ from transaction.models import CreditChargeRequest
 from django.db import transaction
 from transaction.models import Wallet,  NotProcessedCreditChargeRequest as Npreq
 import logging
-
+from transaction.tasks import sell_task
 
 logger = logging.getLogger(__name__)
 
@@ -33,12 +33,5 @@ class CreateSellCreditRequest(CreateAPIView):
     permission_classes = [IsAuthenticated, ]
     
     def post(self, request):
-        try:
-            data = request.data.get('amount')
-            result = super().post(request)
-        except Exception as e:
-            logger.error(f"{request.user} selling credit by {data} has error")
-            raise
-        else:
-            logger.info(f"{request.user.email} sell {data} credit")
-            return result
+        sell_task.delay(request.user.id, request.data)
+        return Response({"status": "processing"}, 201)

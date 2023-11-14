@@ -82,7 +82,7 @@ class ThreadQueue:
         return not_exist
 
     
-    def start_join_all(self, max_connection):
+    def start_join_all(self):
         threads = []
         for tg in self._thread_groups:
         	threads.extend(tg.threads)

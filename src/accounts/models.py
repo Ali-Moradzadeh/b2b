@@ -1,7 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin
 from phonenumber_field.modelfields import PhoneNumberField
-from .managers import UserManager, InactiveUserManager, StaffManager, CustomerManager
+from .managers import UserManager, InactiveUserManager, StaffManager, CustomerManager, UnreadNotificationManager
 from utils.validators import username_validator
 
 
@@ -61,3 +61,15 @@ class Profile(models.Model):
 
     def __str__(self):
         return self.username if self.username else self.user.email
+
+
+class Notification(models.Model):
+    profile = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name="notifications")
+    message = models.CharField(max_length=255)
+    read = models.BooleanField(default=False, editable=False)
+    created_at = models.DateTimeField(auto_now_add=True)
+    
+    unreads = UnreadNotificationManager
+    
+    def __str__(self):
+        return "{}: {}".format(self.profile, self.message)
