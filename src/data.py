@@ -1,116 +1,66 @@
 from django.contrib.auth.hashers import make_password
 from collections import namedtuple
 from django.urls import reverse
+from random import randint, choice
+from transaction.models import Wallet, NotProcessedCreditChargeRequest as Npreq, SellCredit as Screq
 
+USERS_COUNT = 3
 
-user_A = "a@gmail.com"
-user_B = "b@gmail.com"
-user_C = "c@gmail.com"
-user_D = "d@gmail.com"
-user_E = "e@gmail.com"
-user_F = "f@gmail.com"
+TRANSACTION_CHARGE = "charge"
+TRANSACTION_SELL = "sell"
+
+CHARGE_RANGE = (10000, 100000)
+SELL_RANGE = (100, 1000)
+
+CHARGE_COUNT = 10
+SELL_COUNT = 10
+
+random_charge = lambda: randint(*CHARGE_RANGE)
+random_sell = lambda: randint(*SELL_RANGE)
+
+TRANSACTION_TYPES = ("charge", "sell")
+
+TRANSACTION_AMOUNT_RAND_GENERATOR = {
+    TRANSACTION_CHARGE: random_charge,
+    TRANSACTION_SELL: random_sell
+}
+
+transaction_str_class_map = {
+    TRANSACTION_CHARGE: Npreq,
+    TRANSACTION_SELL: Screq, 
+}
+
+transactions_map = CHARGE_COUNT * [TRANSACTION_CHARGE] + SELL_COUNT * [TRANSACTION_SELL]
 
 
 charge_url = reverse("credit_charge")
 sell_url = reverse("sell_credit")
 
+user_email_creator = lambda n: f"test_user_{n}@gmail.com"
+phone_number_creator = lambda n: "+98917123" + "{:04d}".format(n)
 
-users_data = [
-    {
-        "email": user_A,
-        "phone_number": "+989121235559",
+
+users_data = []
+
+for i in range(1, USERS_COUNT+1):
+    predefined_user_data = {
+        "email" : user_email_creator(i),
+        "phone_number": phone_number_creator(i),
         "password": make_password("adminPass?"),
-        #"confrm_password": "adminPass?",
         "is_verified": True,
-    },
-    {
-        "email": user_B,
-        "phone_number": "+989121235558",
-        "password": make_password("adminPass?"),
-        #"confrm_password": "adminPass?",
-        "is_verified": True,
-    },
-    {
-        "email": user_C,
-        "phone_number": "+989121235557",
-        "password": make_password("adminPass?"),
-        #"confrm_password": "adminPass?",
-        "is_verified": True,
-    },
-    {
-        "email": user_D,
-        "phone_number": "+989121235556",
-        "password": make_password("adminPass?"),
-        #"confrm_password": "adminPass?",
-        "is_verified": True,
-    },
-    {
-        "email": user_E,
-        "phone_number": "+989121235555",
-        "password": make_password("adminPass?"),
-        #"confrm_password": "adminPass?",
-        "is_verified": True,
-    },
-    {
-        "email": user_F,
-        "phone_number": "+989121235554",
-        "password": make_password("adminPass?"),
-        #"confrm_password": "adminPass?",
-        "is_verified": True,
-    },
-]
+    }
+    users_data.append(predefined_user_data)
 
+Pattern = namedtuple("Pattern", ["wallet_id", "type", "amount"])
 
-pattern = namedtuple("Pattern", ["user", "url", "amount"])
-
-user_A_transactions = [
-    pattern(user_A, sell_url, 180),
-    pattern(user_A, charge_url, 200),
-    pattern(user_A, charge_url, 130),
-    pattern(user_A, sell_url, 180),
-]
-
-user_B_transactions = [
-    pattern(user_B, charge_url, 100),
-    pattern(user_B, sell_url, 53),
-    pattern(user_B, sell_url, 12),
-    pattern(user_B, charge_url, 36),
-    pattern(user_B, charge_url, 20),
-    pattern(user_B, sell_url, 60),
-]
-
-user_C_transactions = [
-    pattern(user_C, charge_url, 80),
-    pattern(user_C, sell_url, 34),
-    pattern(user_C, charge_url, 67),
-    pattern(user_C, sell_url, 12),
-    pattern(user_C, charge_url, 180),
-    pattern(user_C, sell_url, 84),
-]
-
-user_D_transactions = [
-    pattern(user_D, charge_url, 461),
-    pattern(user_D, sell_url, 164),
-    pattern(user_D, sell_url, 231),
-    pattern(user_D, sell_url, 40),
-]
-
-user_E_transactions = [
-    pattern(user_E, charge_url, 80),
-    pattern(user_E, sell_url, 56),
-    pattern(user_E, sell_url, 13),
-    pattern(user_E, charge_url, 40),
-    pattern(user_E, sell_url, 43),
-]
-
-user_F_transactions = [
-    pattern(user_F, charge_url, 45),
-    pattern(user_F, charge_url, 36),
-    pattern(user_F, sell_url, 67),
-    pattern(user_F, sell_url, 12),
-    pattern(user_F, charge_url, 73),
-    pattern(user_F, sell_url, 49),
-]
-
-
-transaction_patterns = user_A_transactions + user_B_transactions + user_C_transactions + user_D_transactions + user_E_transactions + user_F_transactions
+def generate_rand_patterns(wallet_id):
+    tm_clone = transactions_map[::]
+    patterns = []
+    while tm_clone:
+        transaction_type = choice(tm_clone)
+        tm_clone.remove(transaction_type)
+        rand_data = TRANSACTION_AMOUNT_RAND_GENERATOR[transaction_type]()
+        
+        ptrn = Pattern(wallet_id, transaction_type, rand_data)
+        patterns.append(ptrn)
+    return patterns

@@ -1,4 +1,4 @@
-from rest_framework import viewsets, status
+from rest_framework import viewsets, mixins, status
 from rest_framework.response import Response
 from rest_framework.decorators import action
 from rest_framework.authtoken.views import ObtainAuthToken
@@ -11,6 +11,7 @@ from django.core.exceptions import PermissionDenied
 
 class CreateUserAuthTokenView(ObtainAuthToken):
     def post(self, request, *args, **kwargs):
+        print(request.data)
         serializer = self.serializer_class(data=request.data, context={'request': request})
         serializer.is_valid(raise_exception=True)
         user = serializer.validated_data['user']
@@ -22,7 +23,7 @@ class CreateUserAuthTokenView(ObtainAuthToken):
         })
 
 
-class UserViewSet(viewsets.ModelViewSet):
+class UserViewSet(mixins.CreateModelMixin, mixins.RetrieveModelMixin, mixins.UpdateModelMixin, mixins.DestroyModelMixin, viewsets.GenericViewSet):
     queryset = User.objects.all()
     permission_classes = [ActiveOwner]
     
@@ -65,10 +66,6 @@ class UserViewSet(viewsets.ModelViewSet):
         instance.is_active = False
         instance.save()
         return Response({"deleted": "Done."}, status=status.HTTP_204_NO_CONTENT)
-    
-    def retrieve(self, request, pk):
-        print(request.auth)
-        return super().retrieve(request, pk)
 
 
 class ProfileViewSet(viewsets.ModelViewSet):

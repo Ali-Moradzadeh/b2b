@@ -27,8 +27,3 @@ class CreateSellRequestSerializer(serializers.ModelSerializer):
         data = super().validate(data)
         data['wallet'] = self.context['request'].user.profile.wallet
         return data
-
-    @transaction.atomic
-    def save(self, *args, **kwargs):
-        return super().save(*args, **kwargs)
-    

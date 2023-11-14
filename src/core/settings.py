@@ -99,6 +99,9 @@ DATABASES = {
         'PASSWORD': 'default',
         'HOST': 'localhost',
         'PORT': '5432',
+        'options': {
+            "MAX_CONN": 4000,
+        }
     }
 }
 
@@ -177,3 +180,6 @@ LOGGING = {
         'level': 'ERROR',
     },
 }
+
+
+TEST_RUNNER = 'django.test.runner.DiscoverRunner'

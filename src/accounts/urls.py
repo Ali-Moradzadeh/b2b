@@ -14,7 +14,7 @@ front_urls += router.urls
 
 
 urlpatterns = [
-    path('api-token-auth/', front_views.CreateUserAuthTokenView.as_view()),
+    path('api-token-auth/', front_views.CreateUserAuthTokenView.as_view(), name="api_token"),
     path('', include('rest_framework.urls')),
     path('reset-password/', PasswordResetView.as_view(), name='password_reset'),
     path('reset-password-sent/', PasswordResetDoneView.as_view(), name='password_reset_done'),
