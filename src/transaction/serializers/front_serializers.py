@@ -25,6 +25,5 @@ class CreateSellRequestSerializer(serializers.ModelSerializer):
     
     def validate(self, data):
         data = super().validate(data)
-        
         data['wallet'] = self.context['user'].profile.wallet
         return data

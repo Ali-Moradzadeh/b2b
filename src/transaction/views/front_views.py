@@ -1,13 +1,18 @@
+import logging
+
+from django.db import transaction
+
 from rest_framework.response import Response
 from rest_framework.generics import CreateAPIView
-from transaction.serializers import front_serializers as front_srz
 from rest_framework.permissions import IsAuthenticated
-from transaction.models import Wallet
-from transaction.models import CreditChargeRequest
-from django.db import transaction
-from transaction.models import Wallet,  NotProcessedCreditChargeRequest as Npreq
-import logging
+
+from transaction.models import Wallet, NotProcessedCreditChargeRequest as Npreq
+from transaction.serializers import front_serializers as front_srz
 from transaction.tasks import sell_task
+
+from django.contrib.auth.decorators import login_required
+from rest_framework.decorators import api_view
+
 
 logger = logging.getLogger(__name__)
 
@@ -28,7 +33,7 @@ class CreateCreditChargeRequest(CreateAPIView):
             return result
 
 
-class CreateSellCreditRequest(CreateAPIView):
-    serializer_class = front_srz.CreateSellRequestSerializer
-    permission_classes = [IsAuthenticated, ]
-    
+@api_view(http_method_names=['POST'])
+def sell_credit(request):
+    sell_task.delay(request.user.id, request.data)
+    return Response({}, 201)

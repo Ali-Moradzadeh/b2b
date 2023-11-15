@@ -8,3 +8,17 @@
 2023-11-15 03:42:16.104 +0330 [11803] HINT:  Is another postmaster (PID 30240) running in data directory "/data/data/com.termux/files/home/var/lib/postgresql/content"?
 2023-11-15 03:42:23.764 +0330 [11825] FATAL:  lock file "postmaster.pid" already exists
 2023-11-15 03:42:23.764 +0330 [11825] HINT:  Is another postmaster (PID 30240) running in data directory "/data/data/com.termux/files/home/var/lib/postgresql/content"?
+2023-11-15 04:22:55.079 +0330 [7698] FATAL:  lock file "postmaster.pid" already exists
+2023-11-15 04:22:55.079 +0330 [7698] HINT:  Is another postmaster (PID 7656) running in data directory "/data/data/com.termux/files/home/var/lib/postgresql/content"?
+2023-11-15 04:49:18.909 +0330 [11532] FATAL:  lock file "postmaster.pid" already exists
+2023-11-15 04:49:18.909 +0330 [11532] HINT:  Is another postmaster (PID 10841) running in data directory "/data/data/com.termux/files/home/var/lib/postgresql/content"?
+2023-11-15 05:02:21.898 +0330 [24505] FATAL:  lock file "postmaster.pid" already exists
+2023-11-15 05:02:21.898 +0330 [24505] HINT:  Is another postmaster (PID 24275) running in data directory "/data/data/com.termux/files/home/var/lib/postgresql/content"?
+2023-11-15 05:04:15.096 +0330 [25196] FATAL:  lock file "postmaster.pid" already exists
+2023-11-15 05:04:15.096 +0330 [25196] HINT:  Is another postmaster (PID 25013) running in data directory "/data/data/com.termux/files/home/var/lib/postgresql/content"?
+2023-11-15 05:34:32.178 +0330 [17764] FATAL:  lock file "postmaster.pid" already exists
+2023-11-15 05:34:32.178 +0330 [17764] HINT:  Is another postmaster (PID 17220) running in data directory "/data/data/com.termux/files/home/var/lib/postgresql/content"?
+2023-11-15 05:37:56.993 +0330 [6302] FATAL:  lock file "postmaster.pid" already exists
+2023-11-15 05:37:56.993 +0330 [6302] HINT:  Is another postmaster (PID 6104) running in data directory "/data/data/com.termux/files/home/var/lib/postgresql/content"?
+2023-11-15 07:15:00.526 +0330 [29324] FATAL:  lock file "postmaster.pid" already exists
+2023-11-15 07:15:00.526 +0330 [29324] HINT:  Is another postmaster (PID 28931) running in data directory "/data/data/com.termux/files/home/var/lib/postgresql/content"?
