@@ -32,6 +32,3 @@ class CreateSellCreditRequest(CreateAPIView):
     serializer_class = front_srz.CreateSellRequestSerializer
     permission_classes = [IsAuthenticated, ]
     
-    def post(self, request):
-        sell_task.delay(request.user.id, request.data)
-        return Response({"status": "processing"}, 201)
