@@ -10,7 +10,7 @@ app = Celery('core')
 
 @shared_task
 def sell_task(user_id, data):
-    #notify_func = async_to_sync(get_channel_layer().group_send)
+    notify_func = async_to_sync(get_channel_layer().group_send)
     value = data.get("amount", 0)
     user = User.objects.get(id=user_id)
     try:
@@ -24,5 +24,5 @@ def sell_task(user_id, data):
         msg = f"selling {value} credit FAILED. {e}"
     finally:
         Notification(profile=user.profile, message=msg).save()
-        #notify_func(f"user_{user_id}_transaction_notification", {"type": "notify"})
+        notify_func(f"user_{user_id}_transaction_notification", {"type": "notify"})
     

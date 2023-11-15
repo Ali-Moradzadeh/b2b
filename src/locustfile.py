@@ -42,5 +42,5 @@ class PostApiUser(HttpUser):
     
     @task
     def sell_credit(self):
-        self.client.post(sell_url, json={'amount': 6}, headers=self.headers)
+        self.client.post(sell_url, json={'amount': randint(1, 10)}, headers=self.headers)
     

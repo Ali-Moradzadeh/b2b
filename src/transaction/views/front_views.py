@@ -9,9 +9,7 @@ from rest_framework.permissions import IsAuthenticated
 from transaction.models import Wallet, NotProcessedCreditChargeRequest as Npreq
 from transaction.serializers import front_serializers as front_srz
 from transaction.tasks import sell_task
-
-from django.contrib.auth.decorators import login_required
-from rest_framework.decorators import api_view
+from rest_framework.decorators import api_view, permission_classes
 
 
 logger = logging.getLogger(__name__)
@@ -34,6 +32,13 @@ class CreateCreditChargeRequest(CreateAPIView):
 
 
 @api_view(http_method_names=['POST'])
-def sell_credit(request):
+@permission_classes([IsAuthenticated, ])
+def background_sell_credit(request):
     sell_task.delay(request.user.id, request.data)
-    return Response({}, 201)
+    return Response({"status", "processing"}, 201)
+
+
+@api_view(http_method_names=['POST'])
+@permission_classes([IsAuthenticated, ])
+def sell_credit(request):
+    return Response({"status": "created"}, 201)
