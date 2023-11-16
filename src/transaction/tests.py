@@ -8,11 +8,10 @@ from data import users_data, CHARGE_COUNT, SELL_COUNT, TRANSACTION_CHARGE, TRANS
 
 from random import choice
 from django.db import transaction
-from .threads import ThreadGroup, ThreadQueue
 from functools import reduce
 import logging
 from django.db import connections
-
+import time
 
 logger = logging.getLogger(__name__)
 
@@ -44,7 +43,7 @@ class TransactionTest(TransactionTestCase):
             except Exception as e:
                 msg = f"{count} FAILEDD {wlt.id} {_type} {amount}"
             finally:
-                logger.info(msg)
+                print(msg)
                 connections["default"].close()
     
         for wlt in self.wallets:
@@ -53,11 +52,14 @@ class TransactionTest(TransactionTestCase):
                 klass = transaction_str_class_map[rnd_ptrn.type]
                 perform_transaction(klass, wlt, rnd_ptrn.amount)
         
+        print()
         for wallet in self.wallets:
-            logger.info(f"{wallet} overall charges is {wallet.total_processed_credit_charges()}")
+            print(f"{wallet.profile} overall charges is {wallet.total_processed_credit_charges()}")
+            print(f"{wallet.profile} overall sells is {wallet.total_selled_credits()}")
+            print()
         
         for wallet in self.wallets:
             b = wallet.check_turnover_correctness()
-            logger.info(f"{wallet} turnover is {b}")
+            print(f"{wallet.profile} turnover is {b}")
             self.assertTrue(b)
-   
+    

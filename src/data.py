@@ -12,8 +12,8 @@ TRANSACTION_SELL = "sell"
 CHARGE_RANGE = (10000, 100000)
 SELL_RANGE = (100, 1000)
 
-CHARGE_COUNT = 10
-SELL_COUNT = 10
+CHARGE_COUNT = 6
+SELL_COUNT = 340
 
 random_charge = lambda: randint(*CHARGE_RANGE)
 random_sell = lambda: randint(*SELL_RANGE)
@@ -52,12 +52,14 @@ for i in range(1, USERS_COUNT+1):
     users_data.append(predefined_user_data)
 
 Pattern = namedtuple("Pattern", ["wallet_id", "type", "amount"])
+ResultState = namedtuple("ResultState", ["pattern", "status"])
 
 def generate_rand_patterns(wallet_id):
     tm_clone = transactions_map[::]
     patterns = []
     while tm_clone:
         transaction_type = choice(tm_clone)
+        #transaction_type = tm_clone[0]
         tm_clone.remove(transaction_type)
         rand_data = TRANSACTION_AMOUNT_RAND_GENERATOR[transaction_type]()
         
